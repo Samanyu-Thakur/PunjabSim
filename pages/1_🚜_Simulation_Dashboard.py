@@ -2,6 +2,42 @@
 import streamlit as st
 import pandas as pd
 import joblib
+# --- THEME TOGGLE ---
+# This code block should be at the top of every page in your app
+
+# Initialize session state for theme if it doesn't exist
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+
+# Define CSS for light and dark themes
+light_theme_css = """
+<style>
+    .stApp { background-color: #FFFFFF; color: #000000; }s
+    .stSidebar { background-color: #F0F2F6; }
+</style>
+"""
+
+dark_theme_css = """
+<style>
+    .stApp { background-color: #0E1117; color: #FFFFFF; }
+    .stSidebar { background-color: #1c1c1c; }
+    .stMetric_container { color: #FFFFFF; }
+</style>
+"""
+
+# Button to toggle theme
+if st.sidebar.button(f"Switch to {'Dark' if st.session_state.theme == 'light' else 'Light'} Mode"):
+    st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
+
+# Apply the selected theme's CSS
+st.markdown(dark_theme_css if st.session_state.theme == "dark" else light_theme_css, unsafe_allow_html=True)
+
+# --- THEME TOGGLE (PASTE THE ENTIRE BLOCK HERE) ---
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+# ... (rest of the theme code block) ...
+st.markdown(dark_theme_css if st.session_state.theme == "dark" else light_theme_css, unsafe_allow_html=True)
+# --- END OF THEME TOGGLE BLOCK ---
 
 # Page title and introduction
 st.title("🚜 Simulation Dashboard")
