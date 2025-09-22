@@ -1,42 +1,80 @@
 # pages/2_🤖_Crop_Suggestion_Bot.py
 # pages/2_🤖_Crop_Suggestion_Bot.py
 import streamlit as st
-# --- THEME TOGGLE ---
-# This code block should be at the top of every page in your app
-
-# Initialize session state for theme if it doesn't exist
+# --- START: THEMING & EFFECTS BLOCK ---
+# Initialize session state for theme and disco mode if they don't exist
 if "theme" not in st.session_state:
-    st.session_state.theme = "light"
+ st.session_state.theme = "light"
+if "disco_mode" not in st.session_state:
+ st.session_state.disco_mode = False
 
-# Define CSS for light and dark themes
+# --- CSS DEFINITIONS ---
+
 light_theme_css = """
 <style>
-    .stApp { background-color: #FFFFFF; color: #000000; }
-    .stSidebar { background-color: #F0F2F6; }
+ .stApp { background-color: #FFFFFF; color: #000000; }
+ .stSidebar { background-color: #F0F2F6; }
 </style>
 """
 
 dark_theme_css = """
 <style>
-    .stApp { background-color: #0E1117; color: #FFFFFF; }
-    .stSidebar { background-color: #1c1c1c; }
-    .stMetric_container { color: #FFFFFF; }
+    /* Main app background and text */
+ .stApp { background-color: #0E1117; color: #FFFFFF; }
+
+    /* Sidebar styling with white text */
+ .stSidebar { background-color: #1c1c1c; color: #FFFFFF; }
+
+    /* Make headers and markdown text white */
+ h1, h2, h3, h4, h5, h6, .stMarkdown { color: #FFFFFF; }
+
+    /* Style for expanders */
+ .stExpander { background-color: #1c1c1c; }
+
+    /* Style for text areas */
+ .stTextArea textarea { background-color: #262730; color: #FFFFFF; }
+
+    /* Style for buttons */
+ .stButton>button { color: #FFFFFF; background-color: #3498db; border-color: #3498db; }
+
+    /* Ensure metric labels are visible */
+ .stMetric_container .stMetricLabel { color: #a0a0a0; }
 </style>
 """
 
-# Button to toggle theme
-if st.sidebar.button(f"Switch to {'Dark' if st.session_state.theme == 'light' else 'Light'} Mode"):
+disco_css = """
+<style>
+    @keyframes disco-text {
+        0% { color: red; } 15% { color: orange; } 30% { color: yellow; }
+        45% { color: green; } 60% { color: blue; } 75% { color: indigo; }
+        90% { color: violet; } 100% { color: red; }
+    }
+    h1, h2, h3 { animation: disco-text 4s infinite; }
+</style>
+
+"""
+
+# --- SIDEBAR BUTTONS ---
+
+# A container to group the buttons with
+with st.sidebar:
+ st.write("---") # A small separator
+ if st.button(f"Switch to {'Dark' if st.session_state.theme == 'light' else 'Light'} Mode", key="theme_toggle_bot"):
     st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
+
+ if st.button("🕺 Toggle Disco Mode", key="disco_toggle_bot"):
+    st.session_state.disco_mode = not st.session_state.disco_mode
+
+# --- CSS INJECTION LOGIC ---
 
 # Apply the selected theme's CSS
 st.markdown(dark_theme_css if st.session_state.theme == "dark" else light_theme_css, unsafe_allow_html=True)
 
-# --- THEME TOGGLE (PASTE THE ENTIRE BLOCK HERE) ---
-if "theme" not in st.session_state:
-    st.session_state.theme = "light"
-# ... (rest of the theme code block) ...
-st.markdown(dark_theme_css if st.session_state.theme == "dark" else light_theme_css, unsafe_allow_html=True)
-# --- END OF THEME TOGGLE BLOCK ---
+# Apply disco CSS if disco mode is active (this will override parts of the theme)
+if st.session_state.disco_mode:
+ st.session_state.theme = "disco" # Set theme to disco when disco mode is active
+ st.markdown(disco_css, unsafe_allow_html=True)
+# --- END: THEMING & EFFECTS BLOCK ---
 
 st.title("🤖 AI Crop Suggestion Bot")
 st.markdown("Get an intelligent crop recommendation based on your farm's conditions.")
